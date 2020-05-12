@@ -18,19 +18,38 @@ router.post('/tasks',_auth, async (req, res) => {
     }
 })
 
+///tasks?completed=false
+//tasks?limit=10
+///tasks?limit=2&pageNo=1
 router.get('/tasks', _auth,async (req, res) => {
+    const match ={};
+
+    if(req.query.completed){
+        match.completed = req.query.completed == 'true';
+    }
+
     try {
-        await req.session.user.populate('tasks').execPopulate();
+        await req.session.user.populate({
+            path:'tasks',
+            match,
+            options:{
+                limit: parseInt(req.query.limit),
+                skip: (parseInt(req.query.pageNo)*parseInt(req.query.limit)),
+                sort:{
+                    createdAt: -1 //for desc it's -1, for asc it's 1
+                }
+            }
+        }).execPopulate();
         res.send(req.session.user.tasks)
     } catch {
         res.status(500).send();
     }
 });
 
-router.get('/tasks/:title', _auth,async (req, res) => {
+router.get('/tasks/:id', _auth,async (req, res) => {
     try {
         const task = await Tasks.findOne({
-            title: req.params.title,
+            _id: req.params.id,
             owner: req.session.user._id
         });
         res.send({task});
@@ -73,22 +92,6 @@ router.delete('/tasks/:id', _auth,async(req,res) =>{
         const task = await Tasks.findOneAndRemove({_id: req.params.id,owner: req.session.user._id});
         res.status(task ? 200 : 404).send();
     }catch{
-        res.status(500).send();
-    }
-});
-
-router.get('/filter',_auth, (_req, res) => {
-    res.status(400).send();
-});
-
-router.get('/filter/tasks',_auth, async (req, res) => {
-    try {
-        const task = await Tasks.find({
-            ...req.body,
-            ...{ owner: req.session.user._id}
-        });
-        res.send({task});
-    } catch {
         res.status(500).send();
     }
 });

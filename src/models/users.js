@@ -43,7 +43,12 @@ const _usersSchema = new _mongoose.Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    avatar:{
+        type: Buffer
+    }
+},{
+    timestamps:true
 });
 
 //virtual- in sql , kust like view
@@ -62,6 +67,7 @@ _usersSchema.methods.toJSON = function (){
     delete userObj.password;
     delete userObj.tokens;
     delete userObj.__v;
+    delete userObj.avatar;
 
     return userObj;
 
