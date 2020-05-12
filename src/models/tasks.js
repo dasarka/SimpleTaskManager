@@ -1,6 +1,6 @@
 const _mongoose = require('mongoose');
 
-const _tasks = _mongoose.model('Tasks',{
+const _tasksSchema = new _mongoose.Schema({
     title:{
         type: String,
         required: true,
@@ -17,7 +17,19 @@ const _tasks = _mongoose.model('Tasks',{
     createdOn:{
         type: Date,
         default: new Date()
+    },
+    owner:{
+        type: _mongoose.Schema.Types.ObjectId,
+        required: true
     }
 });
+
+_tasksSchema.pre('save', async function(next){
+    const _task = this;
+
+    next();
+})
+
+const _tasks = _mongoose.model('Tasks',_tasksSchema);
 
 module.exports = _tasks;

@@ -3,5 +3,6 @@ const _config = require('../config');
 
 _mongoose.connect(_config.ConnectionUrl,{
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true
 });
