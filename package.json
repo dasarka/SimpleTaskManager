@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "env-cmd -f ./config/dev.env nodemon src/server.js"
   },
   "keywords": [
     "TaskApp"
@@ -14,7 +14,9 @@
   "author": "Arka Das",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.1.0",
     "bcrypt": "^4.0.1",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.7",

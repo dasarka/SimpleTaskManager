@@ -75,7 +75,7 @@ _usersSchema.methods.toJSON = function (){
 
 _usersSchema.methods.generateAuthToken = async function(){
     const user = this;
-    const token = _jwt.sign({_id: user._id.toString()},'thisismynewcoursewithauthorizationfeatureofjwt');
+    const token = _jwt.sign({_id: user._id.toString()},process.env.AUTH_TOKEN_KEY);
     
     user.tokens=user.tokens.concat({token});
     await user.save();

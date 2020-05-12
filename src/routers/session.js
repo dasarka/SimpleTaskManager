@@ -1,6 +1,7 @@
 const express = require('express');
 const Users = require('../models/users');
 const _auth = require('../middleware/auth');
+const emailAccount = require('../emails/account');
 
 const router = new express.Router();
 
@@ -10,6 +11,7 @@ router.post('/signup', async (req, res) => {
 
     try {
         await user.save();
+        emailAccount.sendWelcomeEmail(user.email,user.name)
         const token = await user.generateAuthToken();
         res.status(201).send({user,token});
     } catch (err) {
