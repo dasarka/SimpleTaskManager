@@ -3,8 +3,7 @@ const _mongoose = require('mongoose');
 const _tasksSchema = new _mongoose.Schema({
     title:{
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     description:{
         type: String,
@@ -14,14 +13,12 @@ const _tasksSchema = new _mongoose.Schema({
         type: Boolean,
         default: false
     },
-    createdOn:{
-        type: Date,
-        default: new Date()
-    },
     owner:{
         type: _mongoose.Schema.Types.ObjectId,
         required: true
     }
+},{
+    timestamps: true
 });
 
 _tasksSchema.pre('save', async function(next){
