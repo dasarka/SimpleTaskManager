@@ -14,9 +14,6 @@ app.use(express.json());
  * with express middleware: new request -> do something -> run route handler
  */
 
-// app.use((req,res,next) =>{
-//     res.status(503).send('TaskManager API site is currently under maintainance. Check back soon!!!');
-// });
 app.use(sessionRouter);
 app.use(profileRouter);
 app.use(taskRouter);
