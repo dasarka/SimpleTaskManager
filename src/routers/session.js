@@ -11,7 +11,7 @@ router.post('/signup', async (req, res) => {
 
     try {
         await user.save();
-        emailAccount.sendWelcomeEmail(user.email,user.name)
+        emailAccount.sendWelcomeEmail(user.email,user.name);
         const token = await user.generateAuthToken();
         res.status(201).send({user,token});
     } catch (err) {
