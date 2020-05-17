@@ -3,6 +3,7 @@ const Users = require('../models/users');
 const _auth = require('../middleware/auth');
 const multer = require('multer');
 const sharp = require('sharp');
+const emailAccount = require('../emails/account');
 
 const router = new express.Router();
 
@@ -37,6 +38,7 @@ router.patch('/users/me',_auth, async (req, res) => {
 router.delete('/users/me',_auth, async(req,res) =>{
     try{
         await req.session.user.remove();
+        emailAccount.sendCancellationEmail(req.session.user.email,req.session.user.name);
         res.send();
     }catch{
         res.status(500).send();
