@@ -84,7 +84,6 @@ router.delete('/users/me/avatar',_auth, async (req,res) =>{
 //http://localhost:3000/users/5eba7bff83a56b2010c9c9f3/avatar
 router.get('/users/:id/avatar', async(req,res) =>{
     try{
-        console.log('get')
         const user = await Users.findById(req.params.id);
 
         if(!user || !user.avatar){

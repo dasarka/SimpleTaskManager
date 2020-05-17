@@ -105,7 +105,7 @@ _usersSchema.statics.findByCredentials = async (email, password) => {
 _usersSchema.pre('save', async function(next){
     const _user = this;
     if(_user.isModified('password')){
-        _user.password = await _bCrypt.hash(_user.password,process.env.HASHING_ROUND);
+        _user.password = await _bCrypt.hash(_user.password,8);
     }
     next();
 });
