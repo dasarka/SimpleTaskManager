@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "test": "env-cmd -f ./config/test.env jest --watch --runInBand --coverage",
+    "test": "env-cmd -f ./config/test.env jest --watchAll --runInBand --coverage",
     "start": "node src/server.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/server.js"
   },
@@ -29,5 +29,21 @@
     "jest": "^26.0.1",
     "nodemon": "^2.0.3",
     "supertest": "^4.0.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "verbose": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
   }
 }
