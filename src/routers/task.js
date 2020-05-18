@@ -76,12 +76,12 @@ router.patch('/tasks/:id',_auth, async (req, res) => {
         });
         if(!task){
             res.status(404).send();
+        }else{
+            updates.forEach(update => task[update] = req.body[update]);
+            await task.save({validateBeforeSave: true});
+    
+            res.send({ task});
         }
-
-        updates.forEach(update => task[update] = req.body[update]);
-        await task.save({validateBeforeSave: true});
-
-        res.send({ task});
     } catch (err) {
         res.status(400).send(err);
     }

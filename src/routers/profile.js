@@ -22,16 +22,17 @@ router.patch('/users/me',_auth, async (req, res) => {
         return res.status(400).send({
             error: "Invalid updates!!!"
         });
-    }
-    try {
-        const {user} = req.session;
-
-        updates.forEach(update => user[update] = req.body[update]);
-        await user.save({validateBeforeSave: true});
-
-        res.send({user});
-    } catch (err) {
-        res.status(400).send(err);
+    }else{
+        try {
+            const {user} = req.session;
+    
+            updates.forEach(update => user[update] = req.body[update]);
+            await user.save({validateBeforeSave: true});
+    
+            res.send({user});
+        } catch (err) {
+            res.status(400).send(err);
+        }
     }
 });
 
@@ -53,9 +54,9 @@ const _upload = multer({
     fileFilter(req,file,cb){
         if(!file.originalname.match(/\.(jpeg|jpg|png)$/)){
             return cb(new Error('Please upload an image'));
+        }else{
+            cb(undefined,true);
         }
-
-        cb(undefined,true);
     }
 });
 

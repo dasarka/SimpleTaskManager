@@ -61,6 +61,13 @@ const setupDatabase = async () => {
     await new Task(taskThree).save()
 }
 
+const deleteTaskDatabase = async () =>{
+    await Task.deleteMany()
+}
+const deleteUserOne = async () =>{
+    await User.findByIdAndDelete(userOneId);
+}
+
 module.exports = {
     userOneId,
     userOne,
@@ -69,5 +76,7 @@ module.exports = {
     taskOne,
     taskTwo,
     taskThree,
-    setupDatabase
+    setupDatabase,
+    deleteTaskDatabase,
+    deleteUserOne
 }

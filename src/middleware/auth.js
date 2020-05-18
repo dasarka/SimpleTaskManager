@@ -9,10 +9,10 @@ const _auth = async (req,res,next) =>{
         const user = await Users.findOne({_id:decoded._id,'tokens.token':token});
         if(!user){
             throw new Error();
+        }else{
+            req.session = {user,token};
+            next();
         }
-
-        req.session = {user,token};
-        next();
     }catch{
         res.status(401).send({error: 'Authorization failure'});
     }

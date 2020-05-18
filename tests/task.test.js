@@ -9,7 +9,9 @@ const {
     taskOne,
     taskTwo,
     taskThree,
-    setupDatabase
+    setupDatabase,
+    deleteUserOne,
+    deleteTaskDatabase
 } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
@@ -30,6 +32,16 @@ test('Should create task for user', async () => {
 })
 
 //filter task
+test('Should fetch all completed user tasks', async () => {
+    const response = await request(app)
+        .get('/tasks')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .query({completed: true})
+        .send()
+        .expect(200)
+    expect(response.body.length).toEqual(1)
+})
+
 test('Should fetch user tasks', async () => {
     const response = await request(app)
         .get('/tasks')
@@ -92,4 +104,42 @@ test('Should not update invalid properties', async () => {
    expect(response.body.error).toEqual('Invalid updates!!!')
 })
 
+test('Should update task', async () => {
+    const response = await request(app)
+   .patch(`/tasks/${taskOne._id}`)
+   .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+   .send({
+       description:'Update Description'
+   })
+   .expect(200)
+   expect(response.body.task.description).toEqual('Update Description')
+})
 
+test('Should update task of other user', async () => {
+    await request(app)
+   .patch(`/tasks/${taskOne._id}`)
+   .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+   .send({
+       description:'Update Description'
+   })
+   .expect(404);
+})
+
+//all catch error test
+test('401 response in create task if user not found', async () => {
+    await deleteUserOne();
+    await request(app)
+        .post('/tasks')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(401)
+})
+
+test('400 response in create task if task db not found', async () => {
+    await deleteTaskDatabase();
+    await request(app)
+        .post('/tasks')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(400)
+})
